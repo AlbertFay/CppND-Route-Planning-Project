@@ -67,7 +67,7 @@ bool Compare(RouteModel::Node *a_pointer, RouteModel::Node *b_pointer){
 RouteModel::Node *RoutePlanner::NextNode() {
 
 std::sort(open_list.begin(), open_list.end(), Compare);
-auto *pointer = *open_list.end();
+RouteModel::Node *pointer = open_list.back();
 open_list.pop_back();
 return pointer;
 }
@@ -88,13 +88,12 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
 
     // TODO: Implement your solution here.
     path_found.insert(path_found.begin(), *current_node);
-    auto currentNode = *current_node;
     
     while(current_node->parent != nullptr)
     {
         distance += current_node->distance(*(current_node->parent));
-        currentNode = *currentNode.parent;
-        path_found.insert(path_found.begin(), currentNode);
+        current_node = current_node->parent;
+        path_found.insert(path_found.begin(), *current_node);
     }
     distance *= m_Model.MetricScale(); // Multiply the distance by the scale of the map to get meters.
     return path_found;
